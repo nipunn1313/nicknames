@@ -1,14 +1,71 @@
 import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import React, { useState, FormEvent } from 'react';
 
 const Home: NextPage = () => {
+  const [people, setPeople] = useState<Array<string>>([]);
+
+  const handleAddPerson = (event: FormEvent) => {
+    event.preventDefault();
+    const target = event.target as typeof event.target & {
+      person: {value: string};
+    };
+    let ps = people.slice();
+    ps.push(target.person.value);
+    setPeople(ps);
+
+    target.person.value = '';
+  };
+
   return (
-    <div>
-      <div>hello</div>
-      <div>world</div>
-    </div>
+    <>
+      <form onSubmit={handleAddPerson}>
+        <label>Add person</label>
+        <input type="text" name="person" />
+        <input type="submit" value="Submit" />
+      </form>
+
+      {
+        people.map((n, i)  => {
+          return <Person name={n}/>
+        })
+      }
+    </>
+  )
+}
+
+type PersonProps = {
+  name: string;
+}
+
+const Person = (props: PersonProps) => {
+  const [nicknames, setNicknames] = useState<Array<string>>([]);
+
+  const handleAddNickname = (event: FormEvent) => {
+    event.preventDefault();
+    const target = event.target as typeof event.target & {
+      nickname: {value: string};
+    };
+
+    let ns = nicknames.slice();
+    ns.push(target.nickname.value);
+    target.nickname.value = '';
+    setNicknames(ns);
+  };
+
+  return (
+    <>
+      <div>{props.name}</div>
+      <form onSubmit={handleAddNickname}>
+        <label>Add nickname for {props.name}: </label>
+        <input type="text" name="nickname" placeholder="Get creative…" />
+        <input type="submit" value="Submit" />
+      </form>
+      {
+        nicknames.map((n, i) => {
+          return <div key={i}>{n}</div>
+        })
+      }
+    </>
   )
 }
 
