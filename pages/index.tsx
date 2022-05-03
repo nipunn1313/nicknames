@@ -1,18 +1,18 @@
 import type { NextPage } from 'next'
 import React, { useState, FormEvent } from 'react';
+import { useMutation, useQuery } from "../convex/_generated";
 
 const Home: NextPage = () => {
-  const [people, setPeople] = useState<Array<string>>([]);
+  const people = useQuery("getPeople") ?? [];
+  const addPerson = useMutation("addPerson");
 
   const handleAddPerson = (event: FormEvent) => {
     event.preventDefault();
     const target = event.target as typeof event.target & {
       person: {value: string};
     };
-    let ps = people.slice();
-    ps.push(target.person.value);
-    setPeople(ps);
 
+    addPerson(target.person.value);
     target.person.value = '';
   };
 
@@ -25,8 +25,8 @@ const Home: NextPage = () => {
       </form>
 
       {
-        people.map((n, i)  => {
-          return <Person name={n}/>
+        people.map((n)  => {
+          return <Person name={n.name}/>
         })
       }
     </>
