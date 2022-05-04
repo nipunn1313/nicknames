@@ -1,9 +1,10 @@
 import type { NextPage } from 'next'
 import React, { useState, FormEvent } from 'react';
 import { useMutation, useQuery } from "../convex/_generated";
+import { PersonRow } from "../convex/getPeople";
 
 const Home: NextPage = () => {
-  const people = useQuery("getPeople") ?? [];
+  const people = useQuery("getPeople");
   const addPerson = useMutation("addPerson");
 
   const handleAddPerson = (event: FormEvent) => {
@@ -16,6 +17,14 @@ const Home: NextPage = () => {
     target.person.value = '';
   };
 
+  const peopleDom = people === undefined ? (
+    <div>Loading people...</div>
+  ) : (
+    people.map((n, i)  => {
+      return <Person key={i} person={n}/>
+    })
+  );
+
   return (
     <>
       <form onSubmit={handleAddPerson}>
@@ -24,21 +33,18 @@ const Home: NextPage = () => {
         <input type="submit" value="Submit" />
       </form>
 
-      {
-        people.map((n)  => {
-          return <Person name={n.name}/>
-        })
-      }
+      {peopleDom}
     </>
   )
 }
 
 type PersonProps = {
-  name: string;
+  person: PersonRow;
 }
 
 const Person = (props: PersonProps) => {
-  const [nicknames, setNicknames] = useState<Array<string>>([]);
+  const addNickname = useMutation("addNickname");
+  const nicknames = useQuery("getNicknamesForPerson", props.person._id);
 
   const handleAddNickname = (event: FormEvent) => {
     event.preventDefault();
@@ -46,25 +52,27 @@ const Person = (props: PersonProps) => {
       nickname: {value: string};
     };
 
-    let ns = nicknames.slice();
-    ns.push(target.nickname.value);
+    addNickname(props.person._id, target.nickname.value);
     target.nickname.value = '';
-    setNicknames(ns);
   };
+
+  const nicknamesDom = nicknames === undefined ? (
+    <div>Loading nicknames for {props.person.name}...</div>
+  ) : (
+    nicknames.map((n, i) => {
+      return <div key={i}>{n.nickname}</div>
+    })
+  );
 
   return (
     <>
-      <div>{props.name}</div>
+      <div>{props.person.name}</div>
       <form onSubmit={handleAddNickname}>
-        <label>Add nickname for {props.name}: </label>
+        <label>Add nickname for {props.person.name}: </label>
         <input type="text" name="nickname" placeholder="Get creative…" />
         <input type="submit" value="Submit" />
       </form>
-      {
-        nicknames.map((n, i) => {
-          return <div key={i}>{n}</div>
-        })
-      }
+      {nicknamesDom}
     </>
   )
 }
