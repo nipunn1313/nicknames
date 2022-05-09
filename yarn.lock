@@ -1176,6 +1176,11 @@
   dependencies:
     "yallist" "^4.0.0"
 
+"materialize-css@^1.0.0":
+  "integrity" "sha512-4/oecXl8y/1i8RDZvyvwAICyqwNoKU4or5uf8uoAd74k76KzZ0Llym4zhJ5lLNUskcqjO0AuMcvNyDkpz8Z6zw=="
+  "resolved" "https://registry.npmjs.org/materialize-css/-/materialize-css-1.0.0.tgz"
+  "version" "1.0.0"
+
 "merge2@^1.3.0", "merge2@^1.4.1":
   "integrity" "sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg=="
   "resolved" "https://registry.npmjs.org/merge2/-/merge2-1.4.1.tgz"

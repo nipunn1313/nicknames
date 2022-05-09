@@ -114,3 +114,13 @@
     flex-direction: column;
   }
 }
+
+.personName {
+  color: #0070f3;
+  font-size: 30px;
+}
+
+.groupName {
+  color: #1d5738;
+  font-size: 35px;
+}

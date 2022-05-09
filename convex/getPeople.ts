@@ -1,9 +1,11 @@
 import { query } from "convex-dev/server";
 import { Id } from "convex-dev/values";
 
-export type PersonRow = {_id: Id, name: string};
+export type PersonRow = {_id: Id, groupId: Id, name: string};
 
-export default query(async ({ db }): Promise<Array<PersonRow>> => {
-    const people = await db.table("people").fullTableScan().collect();
-    return people;
+export default query(async ({ db }, groupId: Id): Promise<Array<PersonRow>> => {
+    return await db
+        .table("people")
+        .filter(q => q.eq(q.field("groupId"), groupId))
+        .collect();
 });
