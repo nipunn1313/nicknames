@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import React, { FormEvent, useState } from 'react';
 import { useMutation, useQuery } from "../convex/_generated";
-import { PersonRow } from "../convex/getPeople";
+import { Member } from "../convex/getMembers";
 import { GroupRow } from "../convex/getGroups";
 import styles from "../styles/Home.module.css";
 import internal from 'stream';
@@ -63,50 +63,34 @@ type GroupProps = {
 }
 
 const Group = (props: GroupProps) => {
-  const people = useQuery("getPeople", props.group._id);
-  const addPerson = useMutation("addPerson");
-
-  const handleAddPerson = (event: FormEvent) => {
-    event.preventDefault();
-    const target = event.target as typeof event.target & {
-      person: {value: string};
-    };
-
-    addPerson(props.group._id, target.person.value);
-    target.person.value = '';
-  };
+  const people = useQuery("getMembers", props.group._id);
+  const addMember = useMutation("addMember");
 
   const peopleDom = people === undefined ? (
     <div>Loading people...</div>
   ) : (
     people.map((n, i)  => {
-      return <Person key={i} person={n}/>
+      return <Person key={i} member={n}/>
     })
   );
 
   return (
     <>
       <div className={styles.groupName}>Group: {props.group.name}</div>
-
-      <form onSubmit={handleAddPerson}>
-        <label>Add person</label>
-        <input type="text" name="person" />
-        <input type="submit" value="Submit" />
-      </form>
-
+      <button onClick={() => addMember(props.group._id)}>Join Group</button>
       {peopleDom}
     </>
   )
 }
 
 type PersonProps = {
-  person: PersonRow;
+  member: Member;
 }
 
 const Person = (props: PersonProps) => {
   const addNickname = useMutation("addNickname");
   const deleteNickname = useMutation("deleteNickname");
-  const nicknames = useQuery("getNicknamesForPerson", props.person._id);
+  const nicknames = useQuery("getMemberNicknames", props.member._id);
 
   const handleAddNickname = (event: FormEvent) => {
     event.preventDefault();
@@ -114,12 +98,12 @@ const Person = (props: PersonProps) => {
       nickname: {value: string};
     };
 
-    addNickname(props.person._id, target.nickname.value);
+    addNickname(props.member._id, target.nickname.value);
     target.nickname.value = '';
   };
 
   const nicknamesDom = nicknames === undefined ? (
-    <div>Loading nicknames for {props.person.name}...</div>
+    <div>Loading nicknames for {props.member.name}...</div>
   ) : (
     nicknames.map((n, i) => {
       return (
@@ -133,9 +117,9 @@ const Person = (props: PersonProps) => {
 
   return (
     <>
-      <div className={styles.personName}>{props.person.name}</div>
+      <div className={styles.personName}>{props.member.name}</div>
       <form onSubmit={handleAddNickname}>
-        <label>Add nickname for {props.person.name}: </label>
+        <label>Add nickname for {props.member.name}: </label>
         <input type="text" name="nickname" placeholder="Get creative…" />
         <input type="submit" value="Submit" />
       </form>

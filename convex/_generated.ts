@@ -3,12 +3,13 @@
 // based on the contents of this directory.
 // To regenerate, run `convex codegen`.
 import type addGroup from "./addGroup";
+import type addMember from "./addMember";
 import type addNickname from "./addNickname";
-import type addPerson from "./addPerson";
 import type deleteNickname from "./deleteNickname";
 import type getGroups from "./getGroups";
-import type getNicknamesForPerson from "./getNicknamesForPerson";
-import type getPeople from "./getPeople";
+import type getMemberNicknames from "./getMemberNicknames";
+import type getMembers from "./getMembers";
+import type storeUser from "./storeUser";
 
 // This jumpstarts TypeScript completion of the convex-dev/values entry point.
 import type { Id } from "convex-dev/values";
@@ -40,14 +41,15 @@ type ClientQuery<F extends (first: QueryCtx, ...args: any) => any> = (
 export type ConvexAPI = {
   queries: {
     getGroups: ClientQuery<typeof getGroups>;
-    getNicknamesForPerson: ClientQuery<typeof getNicknamesForPerson>;
-    getPeople: ClientQuery<typeof getPeople>;
+    getMemberNicknames: ClientQuery<typeof getMemberNicknames>;
+    getMembers: ClientQuery<typeof getMembers>;
   };
   mutations: {
     addGroup: ClientMutation<typeof addGroup>;
+    addMember: ClientMutation<typeof addMember>;
     addNickname: ClientMutation<typeof addNickname>;
-    addPerson: ClientMutation<typeof addPerson>;
     deleteNickname: ClientMutation<typeof deleteNickname>;
+    storeUser: ClientMutation<typeof storeUser>;
   };
 };
 

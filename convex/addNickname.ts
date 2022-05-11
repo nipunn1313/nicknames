@@ -1,9 +1,9 @@
 import { mutation } from "convex-dev/server";
 import { Id } from "convex-dev/values";
 
-export default mutation(async ({db }, person: Id, nickname: string) => {
+export default mutation(async ({db }, member: Id, nickname: string) => {
     const row = {
-        person: person,
+        member: member,
         nickname: nickname,
     };
     db.insert("nicknames", row)

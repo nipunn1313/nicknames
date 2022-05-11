@@ -1,5 +1,10 @@
 {
-  "authInfo": [],
+  "authInfo": [
+    {
+      "domain": "https://dev-6nkf1fvj.us.auth0.com",
+      "applicationID": "UhjmbOBg9JEIX827fxVClpqFhmofwWPi"
+    }
+  ],
   "functions": "convex/",
   "instanceName": "superb-grasshopper-930",
   "origin": "https://superb-grasshopper-930.convex.cloud"
