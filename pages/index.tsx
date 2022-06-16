@@ -5,6 +5,7 @@ import { Member } from "../convex/getMembers";
 import { GroupRow } from "../convex/getGroups";
 import styles from "../styles/Home.module.css";
 import internal from 'stream';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const Home: NextPage = () => {
   // Local browser state for currently viewed group
@@ -63,6 +64,7 @@ type GroupProps = {
 }
 
 const Group = (props: GroupProps) => {
+  const { isAuthenticated } = useAuth0();
   const people = useQuery("getMembers", props.group._id);
   const addMember = useMutation("addMember");
 
@@ -74,10 +76,14 @@ const Group = (props: GroupProps) => {
     })
   );
 
+  const joinDom = isAuthenticated ?  (
+      <button onClick={() => addMember(props.group._id)}>Join Group</button>
+  ) : null;
+
   return (
     <>
       <div className={styles.groupName}>Group: {props.group.name}</div>
-      <button onClick={() => addMember(props.group._id)}>Join Group</button>
+      {joinDom}
       {peopleDom}
     </>
   )
