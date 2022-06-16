@@ -66,6 +66,7 @@ type GroupProps = {
 const Group = (props: GroupProps) => {
   const { isLoading, isAuthenticated } = useAuth0();
   const people = useQuery("getMembers", props.group._id);
+  const alreadyMember = useQuery("getMembers:alreadyMember", props.group._id);
   const addMember = useMutation("addMember");
 
   const peopleDom = people === undefined ? (
@@ -77,12 +78,11 @@ const Group = (props: GroupProps) => {
   );
 
   let joinDom = null;
-  if (!isLoading && isAuthenticated) {
+  if (!isLoading && isAuthenticated && (alreadyMember === false)) {
     joinDom = (
         <button onClick={() => addMember(props.group._id)}>Join Group</button>
     );
   }
-
 
   return (
     <>

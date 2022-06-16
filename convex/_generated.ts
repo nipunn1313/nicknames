@@ -8,6 +8,7 @@ import type addNickname from "./addNickname";
 import type deleteNickname from "./deleteNickname";
 import type getGroups from "./getGroups";
 import type getMemberNicknames from "./getMemberNicknames";
+import type { alreadyMember as getMembers__alreadyMember } from "./getMembers";
 import type getMembers from "./getMembers";
 import type storeUser from "./storeUser";
 
@@ -42,6 +43,7 @@ export type ConvexAPI = {
   queries: {
     getGroups: ClientQuery<typeof getGroups>;
     getMemberNicknames: ClientQuery<typeof getMemberNicknames>;
+    "getMembers:alreadyMember": ClientQuery<typeof getMembers__alreadyMember>;
     getMembers: ClientQuery<typeof getMembers>;
   };
   mutations: {
