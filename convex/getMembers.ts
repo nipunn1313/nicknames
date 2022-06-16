@@ -32,6 +32,5 @@ export const alreadyMember = query(async ({db, auth}, groupId: Id): Promise<bool
         .filter(q => q.eq(q.field("userId"), user._id))
         .first();
 
-    console.log("alreadyMember = " + (existing !== null))
     return existing !== null;
 });
