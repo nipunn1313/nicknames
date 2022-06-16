@@ -4,6 +4,7 @@ import { Id } from "convex-dev/values";
 export type User = {
     _id: Id;
     name: string;
+    email: string;
     tokenIdentifier: string;
 };
 
@@ -39,11 +40,16 @@ export default mutation(async ({ db, auth }): Promise<Id> => {
       user.name = identity.name!;
       db.update(user._id, user);
     }
+    if (user.email != identity.email) {
+      user.email = identity.email!;
+      db.update(user._id, user);
+    }
     return user._id;
   }
   // If it's a new identity, create a new `User`.
   return db.insert("users", {
     name: identity.name!,
+    email: identity.email!,
     tokenIdentifier: identity.tokenIdentifier,
     // The `_id` field will be assigned by the backend.
   });
