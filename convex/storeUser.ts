@@ -1,4 +1,4 @@
-import { mutation } from "convex-dev/server";
+import { mutation } from "./_generated/server";
 import { Id } from "convex-dev/values";
 
 export type User = {
@@ -38,11 +38,11 @@ export default mutation(async ({ db, auth }): Promise<Id> => {
     // If we've seen this identity before but the name has changed, update the value.
     if (user.name != identity.name) {
       user.name = identity.name!;
-      db.update(user._id, user);
+      db.patch(user._id, user);
     }
     if (user.email != identity.email) {
       user.email = identity.email!;
-      db.update(user._id, user);
+      db.patch(user._id, user);
     }
     return user._id;
   }

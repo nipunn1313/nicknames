@@ -1,4 +1,4 @@
-import { query } from "convex-dev/server";
+import { query } from "./_generated/server";
 import { Id } from "convex-dev/values";
 
 export type NicknameRow = {_id: Id, nickname: string};

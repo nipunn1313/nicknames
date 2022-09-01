@@ -1,11 +1,12 @@
 {
+  "project": "nonsense-nicknames",
+  "team": "nipunn1313",
+  "prodUrl": "https://superb-grasshopper-930.convex.cloud",
+  "functions": "convex/",
   "authInfo": [
     {
-      "domain": "https://dev-6nkf1fvj.us.auth0.com",
-      "applicationID": "UhjmbOBg9JEIX827fxVClpqFhmofwWPi"
+      "applicationID": "UhjmbOBg9JEIX827fxVClpqFhmofwWPi",
+      "domain": "https://dev-6nkf1fvj.us.auth0.com"
     }
-  ],
-  "functions": "convex/",
-  "instanceName": "superb-grasshopper-930",
-  "origin": "https://superb-grasshopper-930.convex.cloud"
+  ]
 }

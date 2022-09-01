@@ -1,4 +1,4 @@
-import { mutation } from "convex-dev/server";
+import { mutation } from "./_generated/server";
 import { Id } from "convex-dev/values";
 
 export default mutation(async ({db }, member: Id, nickname: string) => {

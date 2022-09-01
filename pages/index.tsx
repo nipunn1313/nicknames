@@ -1,10 +1,9 @@
 import type { NextPage } from 'next'
 import React, { FormEvent, useState } from 'react';
-import { useMutation, useQuery } from "../convex/_generated";
+import { useMutation, useQuery } from "../convex/_generated/react";
 import { Member } from "../convex/getMembers";
 import { GroupRow } from "../convex/getGroups";
 import styles from "../styles/Home.module.css";
-import internal from 'stream';
 import { useAuth0 } from '@auth0/auth0-react';
 
 const Home: NextPage = () => {
@@ -66,7 +65,6 @@ type GroupProps = {
 const Group = (props: GroupProps) => {
   const { isLoading, isAuthenticated } = useAuth0();
   const people = useQuery("getMembers", props.group._id);
-  const alreadyMember = useQuery("getMembers:alreadyMember", props.group._id);
   const addMember = useMutation("addMember");
 
   const peopleDom = people === undefined ? (
@@ -78,10 +76,13 @@ const Group = (props: GroupProps) => {
   );
 
   let joinDom = null;
-  if (!isLoading && isAuthenticated && (alreadyMember === false)) {
-    joinDom = (
-        <button onClick={() => addMember(props.group._id)}>Join Group</button>
-    );
+  if (!isLoading && isAuthenticated) {
+    const alreadyMember = useQuery("getMembers:alreadyMember", props.group._id);
+    if (alreadyMember === false) {
+      joinDom = (
+          <button onClick={() => addMember(props.group._id)}>Join Group</button>
+      );
+    }
   }
 
   return (
