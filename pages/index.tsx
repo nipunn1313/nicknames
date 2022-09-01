@@ -66,6 +66,7 @@ const Group = (props: GroupProps) => {
   const { isLoading, isAuthenticated } = useAuth0();
   const people = useQuery("getMembers", props.group._id);
   const addMember = useMutation("addMember");
+  const alreadyMember = useQuery("getMembers:alreadyMember", props.group._id);
 
   const peopleDom = people === undefined ? (
     <div>Loading people...</div>
@@ -77,7 +78,6 @@ const Group = (props: GroupProps) => {
 
   let joinDom = null;
   if (!isLoading && isAuthenticated) {
-    const alreadyMember = useQuery("getMembers:alreadyMember", props.group._id);
     if (alreadyMember === false) {
       joinDom = (
           <button onClick={() => addMember(props.group._id)}>Join Group</button>
@@ -120,7 +120,7 @@ const Person = (props: PersonProps) => {
       return (
         <div key={i}>
           {n.nickname}
-          <button onClick={() => deleteNickname(n._id)}>Delete</button>
+          {props.member.isItMe && <button onClick={() => deleteNickname(n._id)}>Veto</button>}
         </div>
       )
     })
@@ -128,7 +128,7 @@ const Person = (props: PersonProps) => {
 
   return (
     <>
-      <div className={styles.personName}>{props.member.name}</div>
+      <div className={styles.personName}>{props.member.name} ({props.member.email})</div>
       <form onSubmit={handleAddNickname}>
         <label>Add nickname for {props.member.name}: </label>
         <input type="text" name="nickname" placeholder="Get creative…" />

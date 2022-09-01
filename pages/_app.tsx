@@ -48,6 +48,22 @@ function Login() {
 }
 
 function Logout() {
+	const [userId, setUserId] = useState<Id<"users"> | null>(null);
+	const storeUser = useMutation("storeUser");
+	// Call the `storeUser` mutation function to store
+	// the current user in the `users` table and return the `Id` value.
+	useEffect(() => {
+		// Store the user in the database.
+		// Recall that `storeUser` gets the user information via the `auth`
+		// object on the server. You don't need to pass anything manually here.
+		async function createUser() {
+			const id = await storeUser();
+			setUserId(id);
+		}
+		createUser();
+		return () => setUserId(null);
+	}, [storeUser]);
+
   const { logout, user } = useAuth0();
   return (
     <div>
@@ -62,5 +78,65 @@ function Logout() {
     </div>
   );
 }
+
+/*
+function LoginLogout() {
+  const { isAuthenticated, isLoading, loginWithRedirect, logout, user, getIdTokenClaims } =
+    useAuth0();
+
+  const [userId, setUserId] = useState<Id | null>(null);
+  const convex = useConvex();
+  const storeUser = useMutation("storeUser");
+  // Pass the ID token to the Convex client when logged in, and clear it when logged out.
+  // After setting the ID token, call the `storeUser` mutation function to store
+  // the current user in the `users` table and return the `Id` value.
+  useEffect(() => {
+    if (isLoading) {
+      return;
+    }
+    if (isAuthenticated) {
+      getIdTokenClaims().then(async claims => {
+        // Get the raw ID token from the claims.
+        const token = claims!.__raw;
+        // Pass it to the Convex client.
+        convex.setAuth(token);
+        // Store the user in the database.
+        // Recall that `storeUser` gets the user information via the `auth`
+        // object on the server. You don't need to pass anything manually here.
+        const id = await storeUser();
+        setUserId(id);
+      });
+    } else {
+      // Tell the Convex client to clear all authentication state.
+      convex.clearAuth();
+      setUserId(null);
+    }
+  }, [isAuthenticated, isLoading, getIdTokenClaims, convex, storeUser]);
+
+  if (isLoading) {
+    return <button className="btn btn-primary">Loading...</button>;
+  }
+  if (isAuthenticated) {
+    return (
+      <div>
+        {
+        <p>Logged in as {user!.name}</p>
+        <button
+          className="btn btn-primary"
+          onClick={() => logout({ returnTo: window.location.origin })}
+        >
+          Log out
+        </button>
+      </div>
+    );
+  } else {
+    return (
+      <button className="btn btn-primary" onClick={loginWithRedirect}>
+        Log in
+      </button>
+    );
+  }
+}
+*/
 
 export default MyApp

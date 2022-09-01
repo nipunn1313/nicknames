@@ -1,16 +1,31 @@
 import { query } from "./_generated/server";
-import { Id } from "convex-dev/values";
+import { Id } from '../convex/_generated/dataModel';
 
-export type Member = {_id: Id, groupId: Id, userId: Id, name: string};
+export type Member = {
+	  _id: Id,
+	  groupId: Id,
+    userId: Id,
+    name: string,
+    email: string,
+    isItMe: boolean,
+};
 
-export default query(async ({ db }, groupId: Id): Promise<Array<Member>> => {
+export default query(async ({ db, auth }, groupId: Id): Promise<Array<Member>> => {
+    const identity = await auth.getUserIdentity();
+    if (!identity) {
+        throw new Error("Unauthenticated call to getMembers");
+    }
+
     let members: Array<Member> = await db
         .table("members")
         .filter(q => q.eq(q.field("groupId"), groupId))
         .collect();
 
     for (let member of members) {
-        member.name = (await db.get(member.userId)).name;
+        const user = await db.get(member.userId);
+        member.name = user.name;
+        member.email = user.email;
+        member.isItMe = identity.tokenIdentifier == user.tokenIdentifier;
     }
 
     return members;
